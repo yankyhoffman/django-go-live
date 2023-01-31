@@ -1,0 +1,12 @@
+{
+  "django": {
+    "secret_key": "django-insecure-SECRET_KEY",
+    "debug": false,
+    "allowed_hosts": []
+  },
+  "timezone": "UTC",
+  "celery": {
+    "broker_url": "",
+    "result_backend": ""
+  }
+}

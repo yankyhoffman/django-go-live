@@ -1,0 +1,23 @@
+<nav class="pagination is-small is-centered">
+  <a class="pagination-previous" href="?page=1">First</a>
+
+  <ul class="pagination-list">
+    {% if page.has_previous %}
+      <li>
+        <a class="pagination-link" href="?page={{ page.previous_page_number }}">{{ page.previous_page_number }}</a>
+      </li>
+    {% endif %}
+
+    <li>
+      <a class="pagination-link is-current">{{ page.number }}</a>
+    </li>
+
+    {% if page.has_next %}
+      <li>
+        <a class="pagination-link" href="?page={{ page.next_page_number }}">{{ page.next_page_number }}</a>
+      </li>
+    {% endif %}
+  </ul>
+
+  <a class="pagination-next" href="?page={{ page.paginator.num_pages }}">Last</a>
+</nav>
