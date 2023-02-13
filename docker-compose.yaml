@@ -7,11 +7,16 @@ services:
     depends_on:
       - redis
       - db
-    env_file:
-      - .env
+    env_file: .env
   redis:
     image: redis:6
   db:
     image: postgres:15
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+  worker:
+    build: .
+    command: ["celery", "--workdir" , "src", "-A", "conf.celery_app", "worker"]
+    env_file: .env
+    depends_on:
+      - redis
