@@ -10,6 +10,7 @@ click-repl==0.2.0
 Django==4.1.6
 kombu==5.2.4
 prompt-toolkit==3.0.36
+psycopg2==2.9.5
 pytz==2022.7.1
 redis==4.5.1
 six==1.16.0
