@@ -20,3 +20,9 @@ services:
     env_file: .env
     depends_on:
       - redis
+  scheduler:
+    build: .
+    command: ["celery", "--workdir" , "src", "-A", "conf.celery_app", "beat"]
+    env_file: .env
+    depends_on:
+      - redis
