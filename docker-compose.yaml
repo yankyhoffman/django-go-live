@@ -7,24 +7,6 @@ services:
       - "8000:8000"
     depends_on:
       - redis
-      - migrations
-      - staticfiles
-    env_file: .env
-    networks:
-      - project
-  migrations:
-    image: project/web:current
-    command: ["python", "src/manage.py", "migrate"]
-    depends_on:
-      - db
-    env_file: .env
-    networks:
-      - project
-  staticfiles:
-    image: project/web:current
-    command: ["python", "src/manage.py", "collectstatic", "--noinput"]
-    depends_on:
-      - db
     env_file: .env
     networks:
       - project
@@ -54,7 +36,6 @@ services:
     env_file: .env
     depends_on:
       - redis
-      - migrations
     networks:
       - project
 volumes:
