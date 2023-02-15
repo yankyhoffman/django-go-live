@@ -7,28 +7,47 @@ services:
       - "8000:8000"
     depends_on:
       - redis
+      - migrations
+    env_file: .env
+    networks:
+      - project
+  migrations:
+    image: project/web:current
+    command: ["python", "src/manage.py", "migrate"]
+    depends_on:
       - db
     env_file: .env
+    networks:
+      - project
   redis:
     image: redis:6
+    networks:
+      - project
   db:
     image: postgres:15
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db-data:/var/lib/postgresql/data
+    networks:
+      - project
   worker:
     image: project/web:current
     command: ["celery", "--workdir" , "src", "-A", "conf.celery_app", "worker"]
     env_file: .env
     depends_on:
       - redis
+    networks:
+      - project
   scheduler:
     image: project/web:current
     command: ["celery", "--workdir" , "src", "-A", "conf.celery_app", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
     env_file: .env
     depends_on:
       - redis
+      - migrations
+    networks:
+      - project
 volumes:
   db-data:
     driver: local
@@ -36,3 +55,5 @@ volumes:
       type: 'none'
       o: 'bind'
       device: './mounts/pg'
+networks:
+  project:
