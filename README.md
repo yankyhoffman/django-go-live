@@ -5,4 +5,4 @@ Endpoints:
 - `run/` Trigger an immediate task with the message set to `"manual task"`
 
 Schedules:
-- Currently defined in `src/conf/beat.py` (TODO: switch to `django_celery_beat`): Defines a task to run every minute with the message `"automatic task"`
+- Run `auto` task every minute with the message `"automatic task"`
