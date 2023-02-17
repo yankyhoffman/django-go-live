@@ -9,6 +9,7 @@ services:
       - db
       - redis
     env_file: .env
+    command: ["gunicorn", "conf.wsgi:application", "--bind", "0.0.0.0:8000"]
     networks:
       - project
   redis:
