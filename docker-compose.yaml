@@ -25,7 +25,7 @@ services:
       - project
   worker:
     image: project/web:current
-    command: ["celery", "--workdir" , "src", "-A", "conf.celery_app", "worker", "--concurrency" ,"3"]
+    command: ["celery", "-A", "conf.celery_app", "worker", "--concurrency" ,"3"]
     env_file: .env
     depends_on:
       - redis
@@ -33,7 +33,7 @@ services:
       - project
   scheduler:
     image: project/web:current
-    command: ["celery", "--workdir" , "src", "-A", "conf.celery_app", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
+    command: ["celery", "-A", "conf.celery_app", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
     env_file: .env
     depends_on:
       - redis
