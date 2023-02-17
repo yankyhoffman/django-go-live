@@ -9,6 +9,9 @@ RUN pip install gunicorn==20.1.0
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN adduser --system --no-create-home webadmin
+USER webadmin
+
 COPY src .
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
