@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y libpq-dev build-essential && apt-get cl
 
 WORKDIR /usr/src/app
 
-RUN pip install gunicorn==20.1.0
+RUN pip install --no-cache-dir gunicorn==20.1.0
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
