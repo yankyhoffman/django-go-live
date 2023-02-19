@@ -5,7 +5,8 @@ services:
     ports:
       - "8001:80"
     volumes:
-      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx:/etc/nginx/conf.d:ro
+      - staticfiles:/home/app/web/staticfiles:ro
     depends_on:
       - web
     networks:
@@ -20,6 +21,8 @@ services:
     command: ["gunicorn", "conf.wsgi:application", "--bind", "0.0.0.0:8000"]
     networks:
       - project
+    volumes:
+      - staticfiles:/usr/src/app/staticfiles
   redis:
     image: redis:6
     networks:
@@ -50,5 +53,6 @@ services:
       - project
 volumes:
   db-data:
+  staticfiles:
 networks:
   project:

@@ -10,9 +10,13 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN adduser --system --no-create-home webadmin
+RUN chown -R webadmin .
 USER webadmin
 
 COPY src .
+
+RUN mkdir staticfiles
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
