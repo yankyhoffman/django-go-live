@@ -9,6 +9,7 @@ services:
       - staticfiles:/home/app/web/staticfiles:ro
     depends_on:
       - web
+      - flower
     networks:
       project:
   web:
@@ -47,6 +48,15 @@ services:
     image: project/web:current
     command: ["celery", "-A", "conf.celery_app", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
     env_file: .env
+    depends_on:
+      - redis
+    networks:
+      - project
+  flower:
+    image: mher/flower:1.2.0
+    command: ["celery", "--broker", "${CELERY_BROKER_URL}", "flower", "--basic_auth", "${FLOWER_USERNAME}:${FLOWER_PASSWORD}"]
+    expose:
+      - "5555"
     depends_on:
       - redis
     networks:
