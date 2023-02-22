@@ -1,3 +1,16 @@
+x-env: &django-env
+  SECRET_KEY: ${SECRET_KEY}
+  DEBUG: ${DEBUG}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+  TIMEZONE: ${TIMEZONE}
+  CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+  CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+  DB_NAME: ${DB_NAME}
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_HOST: ${DB_HOST}
+  DB_PORT: ${DB_PORT}
+
 version: "3.9"
 services:
   nginx:
@@ -19,7 +32,8 @@ services:
     depends_on:
       - db
       - redis
-    env_file: .env
+    environment:
+      <<: *django-env
     command: ["gunicorn", "conf.wsgi:application", "--bind", "0.0.0.0:8000"]
     networks:
       - project
@@ -43,7 +57,8 @@ services:
   worker:
     image: project/web:current
     command: ["celery", "-A", "conf.celery_app", "worker", "--concurrency" ,"3"]
-    env_file: .env
+    environment:
+      <<: *django-env
     depends_on:
       - redis
     networks:
@@ -52,7 +67,8 @@ services:
   scheduler:
     image: project/web:current
     command: ["celery", "-A", "conf.celery_app", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
-    env_file: .env
+    environment:
+      <<: *django-env
     depends_on:
       - redis
     networks:
