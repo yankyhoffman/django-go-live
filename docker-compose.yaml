@@ -12,6 +12,7 @@ services:
       - flower
     networks:
       project:
+    restart: unless-stopped
   web:
     build: .
     image: project/web:current
@@ -24,10 +25,12 @@ services:
       - project
     volumes:
       - staticfiles:/usr/src/app/staticfiles
+    restart: unless-stopped
   redis:
     image: redis:6
     networks:
       - project
+    restart: unless-stopped
   db:
     image: postgres:15
     environment:
@@ -36,6 +39,7 @@ services:
       - db-data:/var/lib/postgresql/data
     networks:
       - project
+    restart: unless-stopped
   worker:
     image: project/web:current
     command: ["celery", "-A", "conf.celery_app", "worker", "--concurrency" ,"3"]
@@ -44,6 +48,7 @@ services:
       - redis
     networks:
       - project
+    restart: unless-stopped
   scheduler:
     image: project/web:current
     command: ["celery", "-A", "conf.celery_app", "beat", "--scheduler", "django_celery_beat.schedulers:DatabaseScheduler"]
@@ -52,6 +57,7 @@ services:
       - redis
     networks:
       - project
+    restart: unless-stopped
   flower:
     image: mher/flower:1.2.0
     command: ["celery", "--broker", "${CELERY_BROKER_URL}", "flower", "--basic_auth", "${FLOWER_USERNAME}:${FLOWER_PASSWORD}"]
@@ -61,6 +67,7 @@ services:
       - redis
     networks:
       - project
+    restart: unless-stopped
 volumes:
   db-data:
   staticfiles:
