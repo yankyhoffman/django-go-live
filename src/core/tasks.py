@@ -11,3 +11,23 @@ def manual():
 @shared_task
 def auto():
     Job.objects.create(message='automatic task')
+
+
+MESSAGES = {
+    'a': 'task A',
+    'b': 'task B',
+    'c': 'task C',
+}
+
+
+@shared_task
+def autoarg(*args):
+    if not args:
+        args = [*MESSAGES]
+
+    for arg in args:
+        message = MESSAGES.get(arg)
+        if message is None:
+            continue
+
+        Job.objects.create(message=message)
